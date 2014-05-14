@@ -18,6 +18,9 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
 
         ## 'id' is an integer vector indicating the monitor ID numbers
         ## to be used
+	## Currently only processing a single input, has to exact match
+	## initial component of file name.  Need to handle range of ID
+	## numbers, pattern match for input files.  i.e. 1 = 001.csv.
 
 	##Validating input 3
 	##print(id)
@@ -33,8 +36,7 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
 	##dataset <- rawdata[(complete.cases(rawdata)), ]
 
 	##Elegant - read in data with lines containing "NA" omitted
-	##dataset <- na.omit(read.csv(paste(directory,(paste(id,"csv",sep = ".")),sep = "/")))
-	dataset <- data.frame(na.omit(read.csv(paste(directory,(paste(id,"csv",sep = ".")),sep = "/"))))
+	dataset <- na.omit(read.csv(paste(directory,(paste(id,"csv",sep = ".")),sep = "/")))
 
 	##Validating operation
 	##dataset
