@@ -1,5 +1,5 @@
 ################################################################################
-pollutantmean <- function(directory, pollutant, id = 1:332, naRem = TRUE) {
+pollutantmean <- function(directory, pollutant, id = 1:332, clean=TRUE) {
         ## 'directory' is a character vector of length 1 indicating
         ## the location of the CSV files
 
@@ -16,27 +16,31 @@ pollutantmean <- function(directory, pollutant, id = 1:332, naRem = TRUE) {
 	## initial component of file name.  Need to handle range of ID
 	## numbers, pattern match for input files.  i.e. 1 = 001.csv.
 
-	## Filenames are 3 digits - 001 through 332.  Force id to 3 digits
-	id <- sprintf("%03d", id)
+	## 'clean' is a logical value.  If true, assume that any datapoints with
+	## NA values in any column correspond to error conditions, either due
+	## to sensor fault, adverse environmental conditions, or data transfer
+	## issues.
 
-	## Assume sensor failure or adverse environmental conditions on partial readings.
-	## Ignore incomplete readings
-	dataset <- na.omit(read.csv(paste(directory,(paste(id,"csv",sep = ".")),sep = "/")))
+	## The below appears to work in all instances.  Will look into tightening
+	## up code with lapply function.
+	for (i in id) {
 
-	## Read in entire dataset, including incomplete/NA portions.
-	## dataset <- read.csv(paste(directory,(paste(id,"csv",sep = ".")),sep = "/"))
+		## Filenames are 3 digits - 001 through 332.  Force id to 3 digits
+		id <- sprintf("%03d", i)
 
-	##Validating operation
-	##dataset
-	##colnames(dataset)
+		if (!clean) {
 
-        ## Return the mean of the pollutant across all monitors list
-        ## in the 'id' vector (ignoring NA values)
+			## Read in entire dataset, including incomplete/NA data.
+			dataset <- read.csv(paste(directory,(paste(id,"csv",sep = ".")),sep = "/"))
 
-	##requires mean(dataset$pollutant), where pollutant is evaluated.
-	mean(dataset[[pollutant]])
+		} else {
 
-	##Below variant for use if we don't clean incomplete datasets on read.
-	##mean(dataset[[pollutant]], na.rm = naRem)
+			dataset <- na.omit(read.csv(paste(directory,(paste(id,"csv",sep = ".")),sep = "/")))
+			
+		}
+		
+	}
 
+	mean(dataset[[pollutant]], na.rm=TRUE)
+	
 }
