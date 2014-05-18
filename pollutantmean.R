@@ -1,5 +1,5 @@
 ################################################################################
-pollutantmean <- function(directory, pollutant, id = 1:332, clean=TRUE) {
+pollutantmean <- function(directory, pollutant, id = 1:332, clean=FALSE) {
         ## 'directory' is a character vector of length 1 indicating
         ## the location of the CSV files
 
@@ -21,8 +21,6 @@ pollutantmean <- function(directory, pollutant, id = 1:332, clean=TRUE) {
 	## to sensor fault, adverse environmental conditions, or data transfer
 	## issues.
 
-	## The below appears to work in all instances.  Will look into tightening
-	## up code with lapply function.
 	for (i in id) {
 
 		## Filenames are 3 digits - 001 through 332.  Force id to 3 digits
