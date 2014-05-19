@@ -14,17 +14,11 @@ complete <- function(directory, id = 1:332 ) {
 	## where 'id' is the monitor ID number and 'nobs' is the
 	## number of complete cases
 
-	x <- ("id")
-	y <- ("nobs")
-
+	nobs <- vector("numeric")
 	for (i in id) {
 
-		x <- c(x, i)
-		## Filenames are 3 digits - 001 through 332.  Force id to 3 digits
-		##id <- sprintf("%03d", i)
-
-		y <- c(y, (nrow(na.omit(read.csv(paste(directory,(paste((sprintf("%03d", i)),"csv",sep = ".")),sep = "/"))))))
+		nobs <- c(nobs, (nrow(na.omit(read.csv(paste(directory,(paste((sprintf("%03d", i)),"csv",sep = ".")),sep = "/"))))))
 	}
-	m <- data.frame(cbind(x,y))
-	write.table(m, quote = FALSE, col.names = FALSE)
+
+	data.frame(cbind(id,nobs))
 }

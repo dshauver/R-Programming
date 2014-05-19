@@ -21,24 +21,23 @@ pollutantmean <- function(directory, pollutant, id = 1:332, clean=FALSE) {
 	## to sensor fault, adverse environmental conditions, or data transfer
 	## issues.
 
-	for (i in id) {
+	dataset <- data.frame()
 
-		## Filenames are 3 digits - 001 through 332.  Force id to 3 digits
-		id <- sprintf("%03d", i)
+	for (i in id) {	
 
 		if (!clean) {
 
 			## Read in entire dataset, including incomplete/NA data.
-			dataset <- read.csv(paste(directory,(paste(id,"csv",sep = ".")),sep = "/"))
+
+			dataset <- rbind(dataset, read.csv(paste(directory,(paste(sprintf("%03d", i),"csv",sep=".")),sep="/")))
 
 		} else {
 
-			dataset <- na.omit(read.csv(paste(directory,(paste(id,"csv",sep = ".")),sep = "/")))
-			
+			## Read the files into the dataset, removing imcomplete data points
+			dataset <- rbind(dataset, na.omit(read.csv(paste(directory,(paste(sprintf("%03d", i),"csv",sep=".")),sep="/"))))
+
 		}
-		
 	}
 
 	mean(dataset[[pollutant]], na.rm=TRUE)
-	
 }
