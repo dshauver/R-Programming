@@ -9,8 +9,16 @@ corr <- function(directory, threshold = 0) {
 
         ## Return a numeric vector of correlations
 
+	corrv <- vector("numeric")
 
-	##Threshold needs to be equal to or less than
-	##nrow(na.omit(read.csv(paste(directory,(paste((sprintf("%03d", i)),"csv",sep = ".")),sep = "/"))))
-	##for each file in the directory.
+	for (i in 1:length(dir(directory))) {
+
+		if ( complete(directory,i)$nobs > threshold) {
+
+			dataset <- na.omit(read.csv(paste(directory,(paste((sprintf("%03d", i)),"csv",sep = ".")),sep = "/")))
+
+			corrv <- append(corrv, cor(dataset$nitrate, dataset$sulfate))
+		}
+	}
+	corrv
 }
